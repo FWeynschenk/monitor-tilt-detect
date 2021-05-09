@@ -1,6 +1,7 @@
 import serial
 import rotatescreen
 import time
+import screen_brightness_control as sbc
 
 def initSerial(dev):
     ser = serial.Serial(dev, 9600, timeout=1,
@@ -52,3 +53,9 @@ while True:
         if landscape:
             monitor.set_portrait_flipped()
             landscape = False
+
+    if (line.find("brightness: ") != -1):
+        cbr = sbc.get_brightness(display=0)
+        nbr = int(line.replace("brightness: ", ""))
+        if(nbr != cbr):
+            sbc.set_brightness(nbr, display=0)
