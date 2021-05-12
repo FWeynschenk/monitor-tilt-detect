@@ -22,7 +22,7 @@ def waitForSerialInit():
                 print("Failed to initialise device on " + dev)
         time.sleep(5)
 
-ser = "waitForSerialInit()"
+ser = waitForSerialInit()
 
 monitor = rotatescreen.get_secondary_displays()[0]
 landscape = monitor.current_orientation == 0
@@ -55,7 +55,15 @@ while True:
             landscape = False
 
     if (line.find("brightness: ") != -1):
-        cbr = sbc.get_brightness(display=0)
+        cbr = -1
+        try:
+            cbr = sbc.get_brightness(display=0)
+        except Exception:
+            pass
+
         nbr = int(line.replace("brightness: ", ""))
         if(nbr != cbr):
-            sbc.set_brightness(nbr, display=0)
+            try:
+                sbc.set_brightness(nbr, display=0)
+            except Exception:
+                pass
