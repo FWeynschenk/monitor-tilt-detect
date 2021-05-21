@@ -4,8 +4,7 @@ import time
 import screen_brightness_control as sbc
 
 def initSerial(dev):
-    ser = serial.Serial(dev, 9600, timeout=1,
-                        xonxoff=False, rtscts=False, dsrdtr=False)
+    ser = serial.Serial(dev, 9600, timeout=1, xonxoff=False, rtscts=False, dsrdtr=False)
     ser.flushInput()
     ser.flushOutput()
     return ser
@@ -45,14 +44,19 @@ while True:
 
     if (line.find("command: landscape") != -1):
         if not landscape:
-            monitor.set_landscape()
-            landscape = True
-
+            try:
+                monitor.set_landscape()
+                landscape = True
+            except Exception:
+                pass
         
     if (line.find("command: portrait") != -1):
         if landscape:
-            monitor.set_portrait_flipped()
-            landscape = False
+            try:
+                monitor.set_portrait_flipped()
+                landscape = False
+            except Exception:
+                pass
 
     if (line.find("brightness: ") != -1):
         cbr = -1
